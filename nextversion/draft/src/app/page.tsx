@@ -1,6 +1,70 @@
+"use client"
+
+import axios from 'axios';
 import Image from 'next/image'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import FormGen from './FormGen';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
+  const [generatedPrompt, setGeneratedPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [prompt, setPrompt] = useState('');
+
+  const handleGeneratePrompt = async (newPrompt) => {
+    setPrompt(newPrompt);
+  };
+
+  useEffect(() => {
+    const fetchGeneratedPrompt = async () => {
+      setLoading(true);
+
+      try {
+        const response = await axios.post(
+          'https://api.openai.com/v1/engines/davinci-codex/completions',
+          {
+            prompt: prompt,
+            max_tokens: 1000,
+            temperature: 0.8,
+            n: 1,
+            stop: '\n',
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer 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',
+            },
+          }
+        );
+
+        const generatedResponse = response.data.choices[0].text.trim();
+        setGeneratedPrompt(generatedResponse);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (prompt) {
+      fetchGeneratedPrompt();
+    }
+  }, [prompt]);
+
   return (
-    <div className='mb-2 mt-0 text-5xl font-medium leading-tight text-primary'> Hello</div>
-  )}
+    <main className='mt-40 flex justify-center h-screen'>
+      <div className='text-center'>
+        <div className='mb-10 text-8xl font-medium leading-tight text-primary'> LoveDraft</div>
+        <div>
+          <FormGen onGeneratePrompt={handleGeneratePrompt} />
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            generatedPrompt && <div>{generatedPrompt}</div>
+          )}
+        </div>
+      </div>
+    </main>
+  );
+}
