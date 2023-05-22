@@ -1,0 +1,61 @@
+{
+  "name": "applyai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {"axios": "^0.27.2",
+  "react": "^17.0.2",
+  "react-dom": "^17.0.2",
+  "@tanstack/react-query": "^4.13.0",
+  "react-router-dom": "^5.3.3",
+  "@prisma/client": "4.12.0",
+  "superjson": "^1.12.2",
+  "@stitches/react": "^1.2.8",
+  "@chakra-ui/react": "1.8.8",
+  "@emotion/react": "11.10.6",
+  "@emotion/styled": "11.10.6",
+  "@types/pdfjs-dist": "2.10.378",
+  "framer-motion": "6.5.1",
+  "node-fetch": "3.3.0",
+  "pdfjs-dist": "3.3.122",
+  "react-hook-form": "7.43.1",
+  "react-icons": "4.8.0",
+  "stripe": "11.15.0"
+},
+  "devDependencies": {"vite": "^4.1.0",
+  "typescript": "^4.9.3",
+  "@types/react": "^17.0.53",
+  "@types/react-dom": "^17.0.19",
+  "@types/react-router-dom": "^5.3.3",
+  "@vitejs/plugin-react-swc": "^3.0.0",
+  "dotenv": "^16.0.3",
+  "@tsconfig/vite-react": "^1.0.1",
+  "vitest": "^0.29.3",
+  "@vitest/ui": "^0.29.3",
+  "jsdom": "^21.1.1",
+  "@testing-library/react": "^12.1.5",
+  "@testing-library/jest-dom": "^5.16.5",
+  "msw": "^1.1.0"
+},
+  "scripts": {
+    "start": "npm run validate-env && vite",
+    "build": "npm run validate-env && tsc && vite build",
+    "validate-env": "node -r dotenv/config ./scripts/validate-env.mjs"
+  },
+  "engineStrict": true,
+  "engines": {
+      "node": "^18.12.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
