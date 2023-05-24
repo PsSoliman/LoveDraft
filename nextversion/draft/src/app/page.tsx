@@ -17,14 +17,16 @@ export default function Home() {
   };
 
   useEffect(() => {
+    console.log('Effect triggered');
     const fetchGeneratedPrompt = async () => {
+      console.log('Making API call...');
       setLoading(true);
 
       try {
         const response = await axios.post(
-          'https://api.openai.com/v1/engines/davinci-codex/completions',
+          'https://api.openai.com/v1/completions/?',
           {
-            prompt: prompt,
+            prompt: "write me a story",
             max_tokens: 1000,
             temperature: 0.8,
             n: 1,

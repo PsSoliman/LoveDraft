@@ -163,7 +163,12 @@ function MainPage() {
     }
   }
 
+  //where is the error in this code?
+  //d
+
+
   async function onSubmit(values: any): Promise<void> {
+    console.log("1")
     const canUserContinue = checkUsageNumbers();
     if (!user) {
       history.push('/login');
@@ -173,7 +178,8 @@ function MainPage() {
       history.push('/profile');
       return;
     }
-
+    console.log("2")
+    
     try {
       const job = await createJob(values);
 
@@ -187,14 +193,15 @@ function MainPage() {
         isCompleteCoverLetter,
         includeWittyRemark: values.includeWittyRemark,
         temperature: creativityValue,
-      };
+      }; 
 
       setLoadingText();
-
+      console.log("3")
       const coverLetter = await generateCoverLetter(payload);
       
       history.push(`/cover-letter/${coverLetter.id}`);
-    } catch (error: any) {
+    } 
+    catch (error: any) {
       alert(`${error?.message ?? 'Something went wrong, please try again'}`);
       console.error(error);
     }
