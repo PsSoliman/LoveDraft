@@ -94,13 +94,9 @@ function JobsPage() {
                     <HStack flex='1' justifyContent='space-between'>
                       <AccordionButton _focus={{ boxShadow: '0px -1px 0px 0px var(--chakra-colors-active)' }}>
                         <Text textDecoration={job.isCompleted ? 'line-through' : ''}>
-                          <b>{job.title}</b> @ {job.company}
+                          <b>{job.title}</b>
                         </Text>
                         <Spacer />
-                        <Text fontSize='sm' color={!job.isCompleted ? 'text-contrast-xs' : 'text-contrast-lg'}>
-                          Applied
-                        </Text>
-                        <Checkbox mx={1} isChecked={job.isCompleted} onChange={(e) => checkboxHandler(e, job)} />
                         <AccordionIcon />
                       </AccordionButton>
                     </HStack>
@@ -123,7 +119,7 @@ function JobsPage() {
                     </HStack>
                     <VStack alignItems={'space-between'} my={1}>
                         <Text>
-                          <b>Description:</b>
+                          <b>Spouse Description:</b>
                         </Text>
                         <Button
                           size='xs'

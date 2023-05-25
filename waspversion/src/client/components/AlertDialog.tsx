@@ -48,7 +48,7 @@ export function LeaveATip({
         <AlertDialogOverlay backdropFilter='auto' backdropInvert='15%' backdropBlur='2px' >
           <AlertDialogContent bgColor='bg-modal'>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              👋 Thanks for trying CoverLetterGPT.
+              👋 Thanks for trying LoveDraft.
             </AlertDialogHeader>
 
             <AlertDialogBody textAlign='center'>
