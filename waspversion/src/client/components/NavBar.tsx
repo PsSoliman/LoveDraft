@@ -42,7 +42,7 @@ export default function NavBar() {
       <HStack width={['md', 'lg', 'xl']} px={1} align='center' justify='space-between'>
         <Heading size='md'>
           <Link as={RouterLink} to='/'>
-            CoverLetterGPT
+            LoveDraft
           </Link>
         </Heading>
         <Spacer />

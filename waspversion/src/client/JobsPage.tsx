@@ -122,10 +122,6 @@ function JobsPage() {
                       </Button>
                     </HStack>
                     <VStack alignItems={'space-between'} my={1}>
-                      <Text>
-                        <b>Location:</b> {job.location}
-                      </Text>
-                      <HStack pb={1}>
                         <Text>
                           <b>Description:</b>
                         </Text>
@@ -139,13 +135,12 @@ function JobsPage() {
                         >
                           Display
                         </Button>
-                      </HStack>
                       <HStack py={1} justify='space-between'>
                         <Button onClick={() => coverLetterHandler(job)} size='sm'>
-                          Display Cover Letter(s)
+                          Display Vows
                         </Button>
                         <Button colorScheme='purple' onClick={() => updateCoverLetterHandler(job.id)} size='sm'>
-                          Create Additional Cover Letter
+                          Create Additional Vows
                         </Button>
                       </HStack>
                     </VStack>

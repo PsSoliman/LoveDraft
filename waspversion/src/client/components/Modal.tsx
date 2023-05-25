@@ -24,6 +24,13 @@ type ModalProps = {
   onOpen: () => void;
 };
 
+//what does code this do?
+
+
+// this code is for the modal that pops up when you click on the vows button
+// it allows you to select a vow and copy it to your clipboard
+// it also allows you to edit the vow
+
 export default function ModalElement({ coverLetterData, isOpen, onOpen, onClose }: ModalProps) {
   const [selectedCoverLetter, setSelectedCoverLetter] = useState<CoverLetter>(coverLetterData[0]);
 
@@ -46,12 +53,12 @@ export default function ModalElement({ coverLetterData, isOpen, onOpen, onClose 
     <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={copyButtonRef}>
       <ModalOverlay backdropFilter='auto' backdropInvert='15%' backdropBlur='2px' />
       <ModalContent maxH='2xl' maxW='2xl' bgColor='bg-modal'>
-        <ModalHeader>Your Cover Letter{coverLetterData.length > 1 && 's'}</ModalHeader>
+        <ModalHeader>Your Vows{coverLetterData.length > 1 && 's'}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {coverLetterData.length > 1 && (
             <Select
-              placeholder='Select Cover Letter'
+              placeholder='Select Vows'
               defaultValue={selectedCoverLetter.id}
               onChange={handleSelectChange}
             >
@@ -79,7 +86,7 @@ export default function ModalElement({ coverLetterData, isOpen, onOpen, onClose 
 
         <ModalFooter>
           <Tooltip
-            label={hasCopied ? 'Copied!' : 'Copy Letter to Clipboard'}
+            label={hasCopied ? 'Copied!' : 'Copy vows to Clipboard'}
             placement='top'
             hasArrow
             closeOnClick={false}

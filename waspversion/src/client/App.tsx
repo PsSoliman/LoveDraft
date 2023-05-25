@@ -2,7 +2,6 @@ import { ChakraProvider, VStack, Box } from '@chakra-ui/react';
 import { theme } from './theme';
 import { ReactNode, useState, useEffect, createContext } from 'react';
 import NavBar from './components/NavBar';
-import { CallToAction } from './components/CallToAction';
 import { EditPopover } from './components/Popover';
 import { useLocation } from 'react-router-dom';
 import useAuth from '@wasp/auth/useAuth';
@@ -76,7 +75,6 @@ export default function App({ children }: { children: ReactNode }) {
         <VStack gap={5}>
           <NavBar />
           {children}
-          <CallToAction />
         </VStack>
       </TextareaContext.Provider>
     </ChakraProvider>

@@ -106,69 +106,9 @@ function MainPage() {
     }
   }
 
-  // pdf to text parser
-  async function onFileUpload(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.files == null) return;
-    if (event.target.files.length == 0) return;
-
-    setValue('pdf', null);
-    setIsPdfReady(false);
-    const pdfFile = event.target.files[0];
-
-    // Read the file using file reader
-    const fileReader = new FileReader();
-
-    fileReader.onload = function () {
-      // turn array buffer into typed array
-      if (this.result == null || !(this.result instanceof ArrayBuffer)) {
-        return;
-      }
-      const typedarray = new Uint8Array(this.result);
-
-      // pdfjs should be able to read this
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
-      const loadingTask = pdfjsLib.getDocument(typedarray);
-      let textBuilder: string = '';
-      loadingTask.promise
-        .then(async (pdf) => {
-          // Loop through each page in the PDF file
-          for (let i = 1; i <= pdf.numPages; i++) {
-            // Get the text content for the page
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const text = content.items
-              .map((item: any) => {
-                if (item.str) {
-                  return item.str;
-                }
-                return '';
-              })
-              .join(' ');
-            textBuilder += text;
-          }
-          setIsPdfReady(true);
-          setValue('pdf', textBuilder);
-          clearErrors('pdf');
-        })
-        .catch((err) => {
-          alert('An Error occured uploading your PDF. Please try again.');
-          console.error(err);
-        });
-    };
-    // Read the file as ArrayBuffer
-    try {
-      fileReader.readAsArrayBuffer(pdfFile);
-    } catch (error) {
-      alert('An Error occured uploading your PDF. Please try again.');
-    }
-  }
-
-  //where is the error in this code?
-  //d
-
-
   async function onSubmit(values: any): Promise<void> {
     console.log("1")
+
     const canUserContinue = checkUsageNumbers();
     if (!user) {
       history.push('/login');
@@ -188,7 +128,6 @@ function MainPage() {
       const payload: CoverLetterPayload = {
         jobId: job.id,
         title: job.title,
-        content: values.pdf,
         description: job.description,
         isCompleteCoverLetter,
         includeWittyRemark: values.includeWittyRemark,
@@ -197,6 +136,7 @@ function MainPage() {
 
       setLoadingText();
       console.log("3")
+
       const coverLetter = await generateCoverLetter(payload);
       
       history.push(`/cover-letter/${coverLetter.id}`);
@@ -229,7 +169,6 @@ function MainPage() {
       payload = {
         id: job.id,
         description: values.description,
-        content: values.pdf,
         isCompleteCoverLetter,
         temperature: creativityValue,
         includeWittyRemark: values.includeWittyRemark,
@@ -240,7 +179,7 @@ function MainPage() {
       const updatedJob = await updateCoverLetter(payload);
 
       if (updatedJob.coverLetter.length === 0) {
-        throw new Error('Cover letter not found');
+        throw new Error('Vow not found');
       }
       history.push(`/cover-letter/${updatedJob.coverLetter[updatedJob.coverLetter.length - 1].id}`);
     } catch (error: any) {
@@ -301,7 +240,7 @@ function MainPage() {
         _hover={{ bgColor: 'bg-contrast-md' }}
         transition='0.1s ease-in-out'
       >
-        <Text fontSize='md'>{coverLetterCount} Cover Letters Generated! 🎉</Text>
+        <Text fontSize='md'>{coverLetterCount} Vows Generated! 🎉</Text>
       </Box>
       <BorderBox>
         <form
@@ -309,7 +248,7 @@ function MainPage() {
           style={{ width: '100%' }}
         >
           <Heading size={'md'} alignSelf={'start'} mb={3}>
-            Job Info {isCoverLetterUpdate && <Code ml={1}>Editing...</Code>}
+            Vow Info {isCoverLetterUpdate && <Code ml={1}>Editing...</Code>}
           </Heading>
           {showSpinner && <Spinner />}
           {showForm && (
@@ -319,7 +258,7 @@ function MainPage() {
                   id='title'
                   borderRadius={0}
                   borderTopRadius={7}
-                  placeholder='job title'
+                  placeholder='Spouse Name'
                   {...register('title', {
                     required: 'This is required',
                     minLength: {
@@ -341,7 +280,7 @@ function MainPage() {
                 <Input
                   id='company'
                   borderRadius={0}
-                  placeholder='company'
+                  placeholder='Years Together'
                   {...register('company', {
                     required: 'This is required',
                     minLength: {
@@ -353,75 +292,16 @@ function MainPage() {
                 />
                 <FormErrorMessage>{formErrors.company && formErrors.company.message}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!formErrors.location}>
-                <Input
-                  id='location'
-                  borderRadius={0}
-                  placeholder='location'
-                  {...register('location', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 2,
-                      message: 'Minimum length should be 2',
-                    },
-                  })}
-                  disabled={isCoverLetterUpdate}
-                />
-                <FormErrorMessage>{formErrors.location && formErrors.location.message}</FormErrorMessage>
-              </FormControl>
               <FormControl isInvalid={!!formErrors.description}>
                 <Textarea
                   id='description'
                   borderRadius={0}
-                  placeholder='copy & paste the job description here'
+                  placeholder='Qualities of Spouse'
                   {...register('description', {
                     required: 'This is required',
                   })}
                 />
                 <FormErrorMessage>{formErrors.description && formErrors.description.message}</FormErrorMessage>
-              </FormControl>
-              <FormControl isInvalid={!!formErrors.pdf}>
-                <Input
-                  id='pdf'
-                  type='file'
-                  accept='application/pdf'
-                  placeholder='pdf'
-                  {...register('pdf', {
-                    required: 'Please upload a CV/Resume',
-                  })}
-                  onChange={(e) => {
-                    onFileUpload(e);
-                  }}
-                  display='none'
-                  ref={fileInputRef}
-                />
-                <VStack
-                  border={!!formErrors.pdf ? '1px solid #FC8181' : 'sm'}
-                  boxShadow={!!formErrors.pdf ? '0 0 0 1px #FC8181' : 'none'}
-                  bg='bg-contrast-sm'
-                  p={3}
-                  alignItems='flex-start'
-                  _hover={{
-                    bg: 'bg-contrast-md',
-                    borderColor: 'border-contrast-md',
-                  }}
-                  transition={
-                    'transform 0.05s ease-in, transform 0.05s ease-out, background 0.3s, opacity 0.3s, border 0.3s'
-                  }
-                >
-                  <HStack>
-                    <FormLabel textAlign='center' htmlFor='pdf'>
-                      <Button size='sm' colorScheme='contrast' onClick={handleFileButtonClick}>
-                        Upload CV
-                      </Button>
-                    </FormLabel>
-                    {isPdfReady && <Text fontSize={'sm'}>👍 uploaded</Text>}
-                    <FormErrorMessage>{formErrors.pdf && formErrors.pdf.message}</FormErrorMessage>
-                  </HStack>
-                  <FormHelperText mt={0.5} fontSize={'xs'}>
-                    Upload a PDF only of Your CV/Resumé
-                  </FormHelperText>
-                </VStack>
               </FormControl>
               <VStack
                 border={'sm'}
@@ -469,7 +349,7 @@ function MainPage() {
                       color: 'text-contrast-lg',
                     }}
                   >
-                    cover letter creativity level
+                    Vow creativity level
                   </FormLabel>
                 </FormControl>
               </VStack>
@@ -513,7 +393,7 @@ function MainPage() {
                   disabled={user === null}
                   type='submit'
                 >
-                  {!isCoverLetterUpdate ? 'Generate Cover Letter' : 'Create New Cover Letter'}
+                  {!isCoverLetterUpdate ? 'Generate Vows' : 'Create New Vows'}
                 </Button>
                 <Text ref={loadingTextRef} fontSize='sm' fontStyle='italic' color='text-contrast-md'>
                   {' '}

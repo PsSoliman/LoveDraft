@@ -6,6 +6,7 @@ import type { User } from './types'
 import { addMetadataToQuery } from '../queries/core'
 
 
+
 export const getMe = createUserGetter()
 
 export default function useAuth(queryFnArgs?: unknown, config?: any) {

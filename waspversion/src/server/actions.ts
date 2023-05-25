@@ -112,7 +112,8 @@ export const generateCoverLetter: GenerateCoverLetter<CoverLetterPayload, CoverL
         where: { id: context.user.id },
         data: {
           credits: {
-            decrement: 1,
+            // decrement: 1,
+            decrement: 0,
           },
         },
       });

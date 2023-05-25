@@ -53,7 +53,7 @@ export function LeaveATip({
 
             <AlertDialogBody textAlign='center'>
               <Text>
-                You have <Code>{credits}</Code> cover letter
+                You have <Code>{credits}</Code> Vows
                 {credits === 1 ? '' : 's'} left
               </Text>
               <Text>
@@ -124,12 +124,10 @@ export function DeleteJob({
       <AlertDialogOverlay backdropFilter='auto' backdropInvert='15%' backdropBlur='2px' >
         <AlertDialogContent bgColor='bg-modal'>
           <AlertDialogHeader fontSize='md' mt={3} fontWeight='bold'>
-            ⛔️ Delete Job
+            ⛔️ Delete Vows
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            Delete the job and all its cover letters?
-            <br />
             This action cannot be undone.
           </AlertDialogBody>
 
@@ -181,7 +179,7 @@ export function EditAlert({ coverLetter }: { coverLetter: boolean }) {
       <AlertDialogOverlay backdropFilter='auto' backdropInvert='15%' backdropBlur='2px' >
         <AlertDialogContent bgColor='bg-modal'>
           <AlertDialogHeader fontSize='md' mt={3} fontWeight='bold'>
-            📝 Your cover letter is ready!
+            📝 Your Vows are ready!
           </AlertDialogHeader>
 
           <AlertDialogBody gap={5} pointerEvents='none'>

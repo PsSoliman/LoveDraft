@@ -68,7 +68,7 @@ export default function ProfilePage({ user }: { user: User }) {
           {userInfo.hasPaid ? (
             <VStack gap={3} pt={5} alignItems='flex-start'>
               <Text textAlign='initial'>
-                Thanks so much for your support. <br /> You have unlimited access to CoverLetterGPT until:
+                Thanks so much for your support. <br /> You have unlimited access to LoveDraft until:
               </Text>
               <Code alignSelf='center' fontSize='lg'>
                 {threeMonthsFromDatePaid.toUTCString().slice(0, -13)}
@@ -86,7 +86,7 @@ export default function ProfilePage({ user }: { user: User }) {
             <HStack pt={3} textAlign='center'>
               <Heading size='sm'>You have </Heading>
               <Code>{userInfo?.credits ? userInfo.credits : '0'}</Code>
-              <Heading size='sm'>cover letter{userInfo?.credits === 1 ? '' : 's'} left</Heading>
+              <Heading size='sm'>Vows left</Heading>
             </HStack>
           )}
           {!userInfo.hasPaid && (
@@ -104,8 +104,7 @@ export default function ProfilePage({ user }: { user: User }) {
                 <VStack gap={3} alignItems='start'>
                   <Heading size='xl'>$2.95</Heading>
                   <Text textAlign='start' fontSize='md'>
-                    10 Cover <br />
-                    Letters
+                    10 Vows <br />
                   </Text>
                 </VStack>
                 <Button mr={3} isLoading={isCreditsLoading} onClick={handleCreditsClick}>
