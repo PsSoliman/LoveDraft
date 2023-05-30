@@ -128,6 +128,7 @@ function MainPage() {
       const payload: CoverLetterPayload = {
         jobId: job.id,
         title: job.title,
+        content: '',
         description: job.description,
         isCompleteCoverLetter,
         includeWittyRemark: values.includeWittyRemark,
@@ -138,8 +139,10 @@ function MainPage() {
       console.log("3")
 
       const coverLetter = await generateCoverLetter(payload);
+      console.log("4")
       
       history.push(`/cover-letter/${coverLetter.id}`);
+      console.log("5")
     } 
     catch (error: any) {
       alert(`${error?.message ?? 'Something went wrong, please try again'}`);
@@ -168,6 +171,7 @@ function MainPage() {
 
       payload = {
         id: job.id,
+        content: '',
         description: values.description,
         isCompleteCoverLetter,
         temperature: creativityValue,
@@ -315,7 +319,8 @@ function MainPage() {
                 transition={
                   'transform 0.05s ease-in, transform 0.05s ease-out, background 0.3s, opacity 0.3s, border 0.3s'
                 }
-              >
+              > 
+
                 <FormControl my={2}>
                   <Slider
                     id='temperature'
