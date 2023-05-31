@@ -23,24 +23,37 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
 const DOMAIN = process.env.WASP_WEB_CLIENT_URL || 'http://localhost:3000';
 
 const gptConfig = {
-  completeCoverLetter: `You are a cover letter generator.
-You will be given a job description along with the job applicant's resume.
-You will write a cover letter for the applicant that matches their past experiences from the resume with the job description.
-Rather than simply outlining the applicant's past experiences, you will give more detail and explain how those experiences will help the applicant succeed in the new job.
-You will write the cover letter in a modern, professional style without being too formal, as a modern employee might do naturally.`,
-  coverLetterWithAWittyRemark: `You are a cover letter generator.
-You will be given a job description along with the job applicant's resume.
-You will write a cover letter for the applicant that matches their past experiences from the resume with the job description.
-Rather than simply outlining the applicant's past experiences, you will give more detail and explain how those experiences will help the applicant succeed in the new job.
-You will write the cover letter in a modern, relaxed style, as a modern employee might do naturally.
-Include a job related joke at the end of the cover letter.`,
+  completeCoverLetter: `write me 7 wedding vows from the perspective of an intelligent, well-written, and loving husband. Use some of the characteristics below in the vows. Use the example vows as examples, but do not copy them word for word. try to avoid being cheesy,
+  include the described qualities of the spouse in the vows.
+  Example Vows:
+  "I vow to always be your protector, and confidante, responsible for making sure your every need is met, every want is reached, and every dream realized"
+  "I feel overwhelmingly lucky and proud to be standing beside you today. Thank you for accepting me for all that I am"
+  "I love you with my whole heart with a passion that can't be expressed in words, only in kisses, glances, and years of adventure by your side"
+  "I vow to always protect you from harm, to stand with you against your troubles, and to look to you when I need protection.
+  `,
+  coverLetterWithAWittyRemark: `write me 7 wedding vows from the perspective of an intelligent, well-written, and loving husband. Use some of the characteristics below in the vows. Use the example vows as examples, but do not copy them word for word. try to avoid being cheesy,
+  include the described qualities of the spouse in the vows.
+  Example Vows:
+  "I vow to always be your protector, and confidante, responsible for making sure your every need is met, every want is reached, and every dream realized"
+  "I feel overwhelmingly lucky and proud to be standing beside you today. Thank you for accepting me for all that I am"
+  "I love you with my whole heart with a passion that can't be expressed in words, only in kisses, glances, and years of adventure by your side"
+  "I vow to always protect you from harm, to stand with you against your troubles, and to look to you when I need protection.
+  `,
   ideasForCoverLetter:
-    "You are a cover letter idea generator. You will be given a job description along with the job applicant's resume. You will generate a bullet point list of ideas for the applicant to use in their cover letter. ",
+  `write me 7 wedding vows from the perspective of an intelligent, well-written, and loving husband. Use some of the characteristics below in the vows. Use the example vows as examples, but do not copy them word for word. try to avoid being cheesy,
+  include the described qualities of the spouse in the vows.
+  Example Vows:
+  "I vow to always be your protector, and confidante, responsible for making sure your every need is met, every want is reached, and every dream realized"
+  "I feel overwhelmingly lucky and proud to be standing beside you today. Thank you for accepting me for all that I am"
+  "I love you with my whole heart with a passion that can't be expressed in words, only in kisses, glances, and years of adventure by your side"
+  "I vow to always protect you from harm, to stand with you against your troubles, and to look to you when I need protection.
+  `,
 };
 
 type CoverLetterPayload = Pick<CoverLetter, 'title' | 'jobId'> & {
   content: string;
   description: string;
+  company: string;
   isCompleteCoverLetter: boolean;
   includeWittyRemark: boolean;
   temperature: number;
@@ -68,7 +81,7 @@ type OpenAIResponse = {
 };
 
 export const generateCoverLetter: GenerateCoverLetter<CoverLetterPayload, CoverLetter> = async (
-  { jobId, title, content, description, isCompleteCoverLetter, includeWittyRemark, temperature },
+  { jobId, title, company, description, isCompleteCoverLetter, includeWittyRemark, temperature },
   context
 ) => {
   if (!context.user) {
@@ -90,11 +103,19 @@ export const generateCoverLetter: GenerateCoverLetter<CoverLetterPayload, CoverL
     messages: [
       {
         role: 'system',
-        content: command,
+        content: `write me 7 wedding vows from the perspective of an intelligent, well-written, and loving husband. Use some of the characteristics below in the vows. Use the example vows as examples, but do not copy them word for word. try to avoid being cheesy,
+        Qualities of spouse: ${description}
+        include this anecdote in one of the vows, but make the language more flowery ${company}
+        Example Vows:
+        "I vow to always be your protector, and confidante, responsible for making sure your every need is met, every want is reached, and every dream realized"
+        "I feel overwhelmingly lucky and proud to be standing beside you today. Thank you for accepting me for all that I am"
+        "I love you with my whole heart with a passion that can't be expressed in words, only in kisses, glances, and years of adventure by your side"
+        "I vow to always protect you from harm, to stand with you against your troubles, and to look to you when I need protection.
+        `,
       },
       {
         role: 'user',
-        content: `My Resume: ${content}. Job title: ${title} Job Description: ${description}.`,
+        content: `Spouse name: ${title} `,
       },
     ],
     max_tokens: tokenNumber,
@@ -157,6 +178,8 @@ export const generateCoverLetter: GenerateCoverLetter<CoverLetterPayload, CoverL
     reject(new HttpError(500, 'Something went wrong'));
   });
 };
+
+
 
 export const generateEdit: GenerateEdit<{ content: string; improvement: string }, string> = async (
   { content, improvement },
@@ -307,6 +330,7 @@ export const updateCoverLetter: UpdateCoverLetter<UpdateCoverLetterPayload, JobW
     {
       jobId: id,
       title: job.title,
+      company: job.company,
       content,
       description: job.description,
       isCompleteCoverLetter,

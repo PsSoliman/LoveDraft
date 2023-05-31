@@ -128,6 +128,7 @@ function MainPage() {
       const payload: CoverLetterPayload = {
         jobId: job.id,
         title: job.title,
+        company: job.company,
         content: '',
         description: job.description,
         isCompleteCoverLetter,
@@ -281,20 +282,15 @@ function MainPage() {
                 <FormErrorMessage>{formErrors.title && formErrors.title.message}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!formErrors.company}>
-                <Input
+                <Textarea
                   id='company'
                   borderRadius={0}
-                  placeholder='Years Together'
+                  placeholder='An anecdote about your spouse that you cherish'
                   {...register('company', {
                     required: 'This is required',
-                    minLength: {
-                      value: 1,
-                      message: 'Minimum length should be 1',
-                    },
                   })}
-                  disabled={isCoverLetterUpdate}
                 />
-                <FormErrorMessage>{formErrors.company && formErrors.company.message}</FormErrorMessage>
+                <FormErrorMessage>{formErrors.description && formErrors.description.message}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!formErrors.description}>
                 <Textarea
